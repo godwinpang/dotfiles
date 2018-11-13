@@ -16,7 +16,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'itchyny/lightline.vim'
 Plugin 'tpope/vim-fugitive'
-Plugin 'scrooloose/syntastic'
+" Plugin 'scrooloose/syntastic'
 Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'tpope/vim-commentary'
 Plugin 'pangloss/vim-javascript'
@@ -50,7 +50,7 @@ filetype indent on
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Set minimum space above and below cursor
-set scrolloff=10
+set scrolloff=5
 
 " Set line numbers
 set relativenumber
@@ -210,8 +210,6 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 1
-
-" for the great gary and his excessive commenting
 
 " create functions for automatic header insertion.
 
