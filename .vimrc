@@ -266,9 +266,11 @@ let NERDTreeDirArrows = 1
 " => Terminal Configuration
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set shell=/usr/local/bin/zsh
-set termwinsize=10x0
-map <silent><Leader>t :belowright terminal<CR>
+map <silent><Leader>t :belowright split term://zsh<CR>
 tnoremap <Esc> <C-\><C-n>
+augroup myterm | au!
+    au TermOpen * if &buftype ==# 'terminal' | resize 10 | endif
+augroup end
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Undotree Configuration

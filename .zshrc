@@ -62,17 +62,19 @@ DISABLE_LS_COLORS="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git brew vscode fast-syntax-highlighting zsh-autosuggestions)
+plugins=(git fast-syntax-highlighting zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
-alias tutor='ssh -i ~/ssh/ecetutors.pem ubuntu@52.15.99.66'
-alias h4g='ssh -i ~/ssh/h4g-casey.pem ubuntu@ec2-18-212-65-47.compute-1.amazonaws.com'
-alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 
 alias c='clear'
 alias ..='cd ..'
 alias lsa='ls -a'
-alias pshell='pipenv shell'
+alias g='git'
+alias p='python'
+alias pe='pyenv'
+alias v='nvim'
+alias vi='nvim'
+alias vim='nvim'
 
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs)
@@ -86,10 +88,6 @@ export PATH="/usr/local/opt/python/libexec/bin:/Users/godwin/Library/Python/3.7/
 export GOPATH=$HOME/code/golang
 export GOROOT=/usr/local/opt/go/libexec
 export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
-
-autoload -U promptinit; promptinit
-prompt pure
-
 
 # User configuration
 
