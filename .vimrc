@@ -37,14 +37,19 @@ Plug 'mbbill/undotree'
 " Git
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
+Plug 'junegunn/gv.vim'
 
 " Go
 Plug 'fatih/vim-go'
 
 " Web
 Plug 'pangloss/vim-javascript'
-Plug 'leafgarland/typescript-vim'
+Plug 'HerringtonDarkholme/yats.vim'
 Plug 'maxmellon/vim-jsx-pretty'
+
+" Markdown
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+
 
 Plug 'vim-python/python-syntax'
 call plug#end()
@@ -55,14 +60,11 @@ set path+=**
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let mapleader=" "
 
-" Sets number of lines of history VIM has to remember
+" Sets number of lines of history vim has to remember
 set history=500
 
 " Enable filetype plugins
 filetype indent plugin on
-
-" Set to autoread when file is changed from outside
-set autoread
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => UI
@@ -73,6 +75,7 @@ set scrolloff=5
 
 " Set line numbers
 set relativenumber
+set number
 
 " Command autocompletion settings
 set wildmenu " enable command autocompletion
@@ -94,7 +97,6 @@ set whichwrap+=<,>,h,l
 " Search settings
 set ignorecase " set search to be case insensitive
 set smartcase " set search to be case sensitive when item has upper case letter
-" set hlsearch " highlights search results
 set incsearch " searches as editing search item
 
 " Highlight matching brackets
@@ -126,6 +128,7 @@ set colorcolumn=100 " Column at 80 chars
 
 " Colorscheme
 colorscheme gruvbox
+let g:gruvbox_contrast_dark = 'hard'
 
 " Enable 256 colors palette
 set t_Co=256
@@ -139,10 +142,8 @@ set guifont=Inconsolata-g\ for\ Powerline\ 18
 " => Backups
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Turn backup off because git is superior (NOT RECOMMENDED)
-" set nobackup
-" set noswapfile
-
+" Swap files are annoying
+set noswapfile
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Tabbing """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -174,9 +175,9 @@ set linebreak     " Set wrap to insert linebreak
 set mouse=a
 
 " Mapping to move around windows
+map <C-h> <C-W>h
 map <C-j> <C-W>j
 map <C-k> <C-W>k
-map <C-h> <C-W>h
 map <C-l> <C-W>l
 
 " Maintain column selection when moving around
@@ -198,10 +199,16 @@ endif
 " Return to last edit position when opening files (You want this!)
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
-nmap <silent> <Leader>gd <Plug>(coc-definition)
-nmap <silent> <Leader>gy <Plug>(coc-type-definition)
-nmap <silent> <Leader>gi <Plug>(coc-implementation)
-nmap <silent> <Leader>gr <Plug>(coc-references)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Folds Configuration
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set foldmethod=syntax
+set foldlevelstart=20
+nmap z za
+
+vnoremap < <gv
+vnoremap > >gv
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Lightline Configuration
@@ -228,31 +235,29 @@ set updatetime=300
 let g:coc_global_extensions = [ 'coc-tsserver', 'coc-eslint', 'coc-go',
                               \ 'coc-yaml', 'coc-json', 'coc-prettier']
 
+nmap <silent> <Leader>gd <Plug>(coc-definition)
+nmap <silent> <Leader>gy <Plug>(coc-type-definition)
+nmap <silent> <Leader>gi <Plug>(coc-implementation)
+nmap <silent> <Leader>gr <Plug>(coc-references)
+
 nmap <Leader>rn <Plug>(coc-rename)
 nmap <Leader>do <Plug>(coc-codeaction)
 
+" Get definition in hover box
 nnoremap <silent> <Leader>d :silent! call CocActionAsync('doHover')<CR>
 
-" use <tab> for trigger completion and navigate to the next complete item
+" Use <tab> for completion navigation
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
+" Use enter to complete
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => netrw Configuration
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_browse_split = 4
-let g:netrw_altv = 1
-let g:netrw_winsize = 25
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => NerdTree Configuration
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <C-n> :NERDTreeToggle<CR>
+map <silent><Leader>n :NERDTreeToggle<CR>
 
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
@@ -260,9 +265,15 @@ let NERDTreeDirArrows = 1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Terminal Configuration
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set shell=/usr/local/bin/zsh
+set termwinsize=10x0
+map <silent><Leader>t :belowright terminal<CR>
+tnoremap <Esc> <C-\><C-n>
 
-map <C-t> :botright terminal zsh<CR>
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Undotree Configuration
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+map <silent><Leader>u :UndotreeToggle<CR>
 
+" IDK why I can't copy
 vmap <C-c> :w !pbcopy<CR><CR>
-
-map <C-u> :UndotreeToggle<CR>
