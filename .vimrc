@@ -4,42 +4,65 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Vundle Plugin Setup
+" => vim-plug Plugin Setup
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set nocompatible              " be iMproved, required
-filetype off                  " required
-"
-" " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'itchyny/lightline.vim'
-Plugin 'bronson/vim-trailing-whitespace'
-Plugin 'tpope/vim-commentary'
-Plugin 'junegunn/goyo.vim'
-Plugin 'morhetz/gruvbox'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'townk/vim-autoclose'
-Plugin 'tpope/vim-surround'
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $HOME/.vimrc
+endif
+
+call plug#begin('~/.vim/plugged')
+" For Looks
+Plug 'itchyny/lightline.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'morhetz/gruvbox'
+Plug 'mhinz/vim-startify'
+
+" Autocomplete
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Utils
+Plug 'bronson/vim-trailing-whitespace'
+Plug 'tpope/vim-commentary'
+Plug 'townk/vim-autoclose'
+Plug 'tpope/vim-surround'
+Plug 'jremmen/vim-ripgrep'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'mbbill/undotree'
+
+" Git
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+
+" Go
+Plug 'fatih/vim-go'
+
+" Web
+Plug 'pangloss/vim-javascript'
+Plug 'leafgarland/typescript-vim'
+Plug 'maxmellon/vim-jsx-pretty'
+
+Plug 'vim-python/python-syntax'
+call plug#end()
+set path+=**
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let mapleader=" "
 
 " Sets number of lines of history VIM has to remember
 set history=500
 
 " Enable filetype plugins
-filetype plugin on
-filetype indent on
+filetype indent plugin on
 
 " Set to autoread when file is changed from outside
- set autoread
-
+set autoread
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => UI
@@ -88,6 +111,7 @@ set lazyredraw
 " Remove mode (shown in lightline anyways)
 set noshowmode
 
+set encoding=UTF-8
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Color and Fonts
@@ -97,8 +121,8 @@ set noshowmode
 syntax enable
 
 " 80 char line length
-match Error /\%81v.\+/ " Highlight chars over 80
-set colorcolumn=80 " Column at 80 chars
+match Error /\%101v.\+/ " Highlight chars over 80
+set colorcolumn=100 " Column at 80 chars
 
 " Colorscheme
 colorscheme gruvbox
@@ -109,6 +133,7 @@ set t_Co=256
 " Background
 set background=dark
 
+set guifont=Inconsolata-g\ for\ Powerline\ 18
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Backups
@@ -120,8 +145,7 @@ set background=dark
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Tabbing
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Tabbing """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Use spaces instead of tabs
 set expandtab
@@ -129,20 +153,18 @@ set expandtab
 " Set tab to 4 spaces
 set shiftwidth=4
 set tabstop=4
-set softtabstop=4
+
+autocmd FileType yml setlocal tabstop=2 shiftwidth=2
+autocmd FileType json setlocal tabstop=2 shiftwidth=2
+autocmd FileType javascript setlocal tabstop=2 shiftwidth=2
+autocmd FileType typescript setlocal tabstop=2 shiftwidth=2
 
 " Indentation
 set autoindent " maintain indentation on newline
-set smartindent " insert new indentation if needed
 
 " Wrapping text
-set textwidth=80 " Set length to wrap at
-set linebreak    " Set wrap to insert linebreak
-if has('autocmd')
-    autocmd FileType * setlocal formatoptions+=t " overrides filetype plugin
-                                                 " format options setting
-endif
-
+set textwidth=100 " Set length to wrap at
+set linebreak     " Set wrap to insert linebreak
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Moving Around
@@ -170,21 +192,23 @@ fun! CleanExtraSpaces()
 endfun
 
 if has("autocmd")
-    autocmd BufWritePre *.h,*.c,*.java,*.vimrc,*.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.ino,*cs :call CleanExtraSpaces()
+    autocmd BufWritePre *.h,*.c,*.java,*.vimrc,*.txt,*.js,*.py,*.go,*.ts,*.tsx :call CleanExtraSpaces()
 endif
-
-" Save upon losing focus
-au FocusLost * :wa
 
 " Return to last edit position when opening files (You want this!)
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+nmap <silent> <Leader>gd <Plug>(coc-definition)
+nmap <silent> <Leader>gy <Plug>(coc-type-definition)
+nmap <silent> <Leader>gi <Plug>(coc-implementation)
+nmap <silent> <Leader>gr <Plug>(coc-references)
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Lightline Configuration
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let g:lightline = {
-	\ 'colorscheme': 'gruvbox',
+    \ 'colorscheme': 'gruvbox',
     \ 'active': {
     \   'left': [ [ 'mode', 'paste' ],
     \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
@@ -197,71 +221,48 @@ let g:lightline = {
     \ },
     \ }
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Coc Configuration
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set updatetime=300
+let g:coc_global_extensions = [ 'coc-tsserver', 'coc-eslint', 'coc-go',
+                              \ 'coc-yaml', 'coc-json', 'coc-prettier']
+
+nmap <Leader>rn <Plug>(coc-rename)
+nmap <Leader>do <Plug>(coc-codeaction)
+
+nnoremap <silent> <Leader>d :silent! call CocActionAsync('doHover')<CR>
+
+" use <tab> for trigger completion and navigate to the next complete item
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Syntastic Configuration
+" => netrw Configuration
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_browse_split = 4
+let g:netrw_altv = 1
+let g:netrw_winsize = 25
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => NerdTree Configuration
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+map <C-n> :NERDTreeToggle<CR>
+
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Terminal Configuration
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 1
+map <C-t> :botright terminal zsh<CR>
 
-" create functions for automatic header insertion.
-
-" Function for setting up C/C++ file headers
-function FileHeadingC()
-  let s:line=line(".")
-  call setline(s:line, "/*-----------------------------------------------------------------------------")
-  call append(s:line, "")
-  call append(s:line+1, "                                                        Godwin Pang")
-  call append(s:line+2, "                                                        " .strftime("%d %b %Y"))
-  call append(s:line+3, "                                                        cs12xfu")
-  call append(s:line+4,"                                    Homework X")
-  call append(s:line+5, "")
-  call append(s:line+6, "File Name:       " .expand("%"))
-  call append(s:line+7, "Description:     TODO")
-  call append(s:line+8, "-----------------------------------------------------------------------------*/")
-  unlet s:line
-endfunction
-
-" Function for setting up C/C++ struct/class headers
-function StructHeading()
-  let s:line=line(".")
-  call setline(s:line, "/*=============================================================================")
-  call append(s:line, "/ struct/class XXX add struct/class name here XXX")
-  call append(s:line+1, "/")
-  call append(s:line+2, "/ Description: TODO")
-  call append(s:line+3, "/")
-  call append(s:line+4, "/ Data Fields: TODO")
-  call append(s:line+5, "/")
-  call append(s:line+6, "/ Public Functions:")
-  call append(s:line+7, "/ TODO")
-  call append(s:line+8,"/============================================================================*/")
-  unlet s:line
-endfunction
-
-" Function for setting up C/C++ function headers
-function FunctionHeading()
-  let s:line=line(".")
-  call setline(s:line, "/*-----------------------------------------------------------------------------")
-  call append(s:line,   "* Function Name:  TODO")
-  call append(s:line+1, "* Purpose:        TODO")
-  call append(s:line+2, "*")
-  call append(s:line+3, "* Description:    TODO")
-  call append(s:line+4, "*")
-  call append(s:line+5, "* Input:          TODO")
-  call append(s:line+6, "* Output:         TODO")
-  call append(s:line+7, "* Result:         TODO")
-  call append(s:line+8, "*")
-  call append(s:line+9, "* Side Effects:   TODO")
-  call append(s:line+10, "-----------------------------------------------------------------------------*/")
-  unlet s:line
-endfunction
-
-" Map the functions to keys for usage
 vmap <C-c> :w !pbcopy<CR><CR>
-nnoremap <F8> mz:execute FileHeadingC()<CR>`zj
-nnoremap <F9> mz:execute StructHeading()<CR>`zj
-nnoremap <F10> mz:execute FunctionHeading()<CR>`zj
 
+map <C-u> :UndotreeToggle<CR>
