@@ -1,11 +1,11 @@
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""
 " Author: Godwin Pang - github: @godwinpang
 " vimrc setup
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 " => vim-plug Plugin Setup
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 set nocompatible              " be iMproved, required
 
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -18,8 +18,8 @@ call plug#begin('~/.vim/plugged')
 " For Looks
 Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
-Plug 'morhetz/gruvbox'
 Plug 'mhinz/vim-startify'
+Plug 'arcticicestudio/nord-vim'
 
 " Autocomplete
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -27,12 +27,13 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Utils
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'tpope/vim-commentary'
-Plug 'townk/vim-autoclose'
+Plug 'jiangmao/auto-pairs'
 Plug 'tpope/vim-surround'
 Plug 'jremmen/vim-ripgrep'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'mbbill/undotree'
+Plug 'alvan/vim-closetag'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -45,7 +46,6 @@ Plug 'fatih/vim-go'
 " Web
 Plug 'pangloss/vim-javascript'
 Plug 'HerringtonDarkholme/yats.vim'
-Plug 'maxmellon/vim-jsx-pretty'
 
 " Markdown
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
@@ -55,9 +55,9 @@ Plug 'vim-python/python-syntax'
 call plug#end()
 set path+=**
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 " => General
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 let mapleader=" "
 
 " Sets number of lines of history vim has to remember
@@ -66,10 +66,7 @@ set history=500
 " Enable filetype plugins
 filetype indent plugin on
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => UI
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 " Set minimum space above and below cursor
 set scrolloff=5
 
@@ -115,10 +112,9 @@ set noshowmode
 
 set encoding=UTF-8
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 " => Color and Fonts
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
+""""""""""""""""""""""""""""""
 " Highlight keywords in language
 syntax enable
 
@@ -127,8 +123,7 @@ match Error /\%101v.\+/ " Highlight chars over 80
 set colorcolumn=100 " Column at 80 chars
 
 " Colorscheme
-colorscheme gruvbox
-let g:gruvbox_contrast_dark = 'hard'
+colorscheme nord
 
 " Enable 256 colors palette
 set t_Co=256
@@ -137,16 +132,20 @@ set t_Co=256
 set background=dark
 
 set guifont=Inconsolata-g\ for\ Powerline\ 18
+if (has("termguicolors"))
+  set termguicolors
+endif
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 " => Backups
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 
 " Swap files are annoying
 set noswapfile
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Tabbing """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
+" => Tabbing
+""""""""""""""""""""""""""""""
 
 " Use spaces instead of tabs
 set expandtab
@@ -158,7 +157,9 @@ set tabstop=4
 autocmd FileType yml setlocal tabstop=2 shiftwidth=2
 autocmd FileType json setlocal tabstop=2 shiftwidth=2
 autocmd FileType javascript setlocal tabstop=2 shiftwidth=2
+autocmd FileType javascriptreact setlocal tabstop=2 shiftwidth=2
 autocmd FileType typescript setlocal tabstop=2 shiftwidth=2
+autocmd FileType typescriptreact setlocal tabstop=2 shiftwidth=2
 
 " Indentation
 set autoindent " maintain indentation on newline
@@ -167,18 +168,18 @@ set autoindent " maintain indentation on newline
 set textwidth=100 " Set length to wrap at
 set linebreak     " Set wrap to insert linebreak
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 " => Moving Around
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 
 " For mouse normies like me
 set mouse=a
 
 " Mapping to move around windows
-map <C-h> <C-W>h
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-l> <C-W>l
+map <Leader>h <C-W>h
+map <Leader>j <C-W>j
+map <Leader>k <C-W>k
+map <Leader>l <C-W>l
 
 " Maintain column selection when moving around
 set nostartofline
@@ -199,9 +200,9 @@ endif
 " Return to last edit position when opening files (You want this!)
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 " => Folds Configuration
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 
 set foldmethod=syntax
 set foldlevelstart=20
@@ -210,12 +211,12 @@ nmap z za
 vnoremap < <gv
 vnoremap > >gv
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 " => Lightline Configuration
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 
 let g:lightline = {
-    \ 'colorscheme': 'gruvbox',
+    \ 'colorscheme': 'nord',
     \ 'active': {
     \   'left': [ [ 'mode', 'paste' ],
     \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
@@ -228,9 +229,9 @@ let g:lightline = {
     \ },
     \ }
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 " => Coc Configuration
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 set updatetime=300
 let g:coc_global_extensions = [ 'coc-tsserver', 'coc-eslint', 'coc-go',
                               \ 'coc-yaml', 'coc-json', 'coc-prettier']
@@ -246,25 +247,40 @@ nmap <Leader>do <Plug>(coc-codeaction)
 " Get definition in hover box
 nnoremap <silent> <Leader>d :silent! call CocActionAsync('doHover')<CR>
 
-" Use <tab> for completion navigation
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" When pum is visible, if selected then enter selection else select first then enter
+"
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? (coc#_selected() ? "\<C-y>" : "\<C-n><C-y>") :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+" inoremap <silent><TAB> :call Call_tab()<CR>
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-" Use enter to complete
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
+inoremap <expr><CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+""""""""""""""""""""""""""""""
 " => NerdTree Configuration
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 map <silent><Leader>n :NERDTreeToggle<CR>
 
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
+" => Closetag Configuration
+""""""""""""""""""""""""""""""
+let g:closetag_filetypes= 'javascript,javascriptreact,typescript,typescriptreact,html'
+let g:closetag_xhtml_filetypes= 'javascript,javascriptreact,typescript,typescriptreact,html'
+let g:closetag_emptyTags_caseSensitive = 1
+
+""""""""""""""""""""""""""""""
 " => Terminal Configuration
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 set shell=/usr/local/bin/zsh
 map <silent><Leader>t :belowright split term://zsh<CR>
 tnoremap <Esc> <C-\><C-n>
@@ -272,9 +288,9 @@ augroup myterm | au!
     au TermOpen * if &buftype ==# 'terminal' | resize 10 | endif
 augroup end
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 " => Undotree Configuration
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 map <silent><Leader>u :UndotreeToggle<CR>
 
 " IDK why I can't copy
