@@ -27,7 +27,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Utils
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'tpope/vim-commentary'
-Plug 'jiangmao/auto-pairs'
+Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
 Plug 'jremmen/vim-ripgrep'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -46,6 +46,8 @@ Plug 'fatih/vim-go'
 " Web
 Plug 'pangloss/vim-javascript'
 Plug 'HerringtonDarkholme/yats.vim'
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'jxnblk/vim-mdx-js'
 
 " Markdown
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
@@ -285,7 +287,7 @@ set shell=/usr/local/bin/zsh
 map <silent><Leader>t :belowright split term://zsh<CR>
 tnoremap <Esc> <C-\><C-n>
 augroup myterm | au!
-    au TermOpen * if &buftype ==# 'terminal' | resize 10 | endif
+    au TermOpen * if &buftype ==# 'terminal' | resize 8 | setlocal nonumber norelativenumber | endif
 augroup end
 
 """"""""""""""""""""""""""""""
