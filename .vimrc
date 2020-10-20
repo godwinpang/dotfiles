@@ -284,11 +284,13 @@ let g:closetag_emptyTags_caseSensitive = 1
 " => Terminal Configuration
 """"""""""""""""""""""""""""""
 set shell=/usr/local/bin/zsh
-map <silent><Leader>t :belowright split term://zsh<CR>
 tnoremap <Esc> <C-\><C-n>
-augroup myterm | au!
-    au TermOpen * if &buftype ==# 'terminal' | resize 8 | setlocal nonumber norelativenumber | endif
-augroup end
+if has('nvim')
+    map <silent><Leader>t :belowright split term://zsh<CR>
+    augroup myterm | au!
+        au TermOpen * if &buftype ==# 'terminal' | resize 8 | setlocal nonumber norelativenumber | endif
+    augroup end
+endif
 
 """"""""""""""""""""""""""""""
 " => Undotree Configuration
