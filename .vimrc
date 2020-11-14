@@ -127,16 +127,10 @@ set colorcolumn=100 " Column at 80 chars
 " Colorscheme
 colorscheme nord
 
-" Enable 256 colors palette
-set t_Co=256
-
 " Background
 set background=dark
 
 set guifont=Inconsolata-g\ for\ Powerline\ 18
-if (has("termguicolors"))
-  set termguicolors
-endif
 
 """"""""""""""""""""""""""""""
 " => Backups
@@ -279,18 +273,6 @@ let NERDTreeDirArrows = 1
 let g:closetag_filetypes= 'javascript,javascriptreact,typescript,typescriptreact,html'
 let g:closetag_xhtml_filetypes= 'javascript,javascriptreact,typescript,typescriptreact,html'
 let g:closetag_emptyTags_caseSensitive = 1
-
-""""""""""""""""""""""""""""""
-" => Terminal Configuration
-""""""""""""""""""""""""""""""
-set shell=/usr/local/bin/zsh
-tnoremap <Esc> <C-\><C-n>
-if has('nvim')
-    map <silent><Leader>t :belowright split term://zsh<CR>
-    augroup myterm | au!
-        au TermOpen * if &buftype ==# 'terminal' | resize 8 | setlocal nonumber norelativenumber | endif
-    augroup end
-endif
 
 """"""""""""""""""""""""""""""
 " => Undotree Configuration

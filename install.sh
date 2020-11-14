@@ -3,6 +3,6 @@
 mv ~/.vimrc ~/.vimrc.old
 cp ./.vimrc ~/.vimrc
 
-vim +PlugInstall
+vim +PlugInstall +qall
 
 echo "Installation Complete!"
